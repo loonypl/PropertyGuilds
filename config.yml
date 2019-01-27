@@ -1,0 +1,86 @@
+# PropertyGuilds plugin
+# version: 0.1
+# core: 1.13.2
+# © krzysek (deew)
+# Permissions: propertyguilds.default, propertyguilds.reload
+# MySQL configuration
+#  host - MySQL server address
+#  port - MySQL server port
+#  user - MySQL server user
+#  password - MySQL server password
+#  database - the database must be create before plugin installation
+mysql:
+  host: 'localhost'
+  port: '3306'
+  user: 'root'
+  password: '123'
+  database: 'PropertyGuilds_plugin'
+#
+chat:
+  # Enable chat formatting (color messages - propertyguilds.chatcolor)
+  enable: true
+  # Chat format
+  # %guild-tag%, %guild-name%, %guild-points%, %name%, %kills%, %deaths%, %points%, %world%, %message%
+  format: '&8[&c&f%guild-tag%&8] &8[&6%points%&8] &r%name% &6> &r%message%'
+create-require-items:
+  # Need items for creating guild
+  enable: true
+  # Gui size
+  gui-size: 9
+  # Items needed for creating guild (creating-require-items: true)
+  list:
+    - '16@DIAMOND'
+    - '32@OBSIDIAN'
+guild:
+  # Tag lengths
+  tag:
+    # Min tag length
+    min: 3
+    # Max tag length
+    max: 6
+  # Name lengths
+  name:
+    # Min name length
+    min: 3
+    # Max name length
+    max: 16
+  # Property
+  property:
+    # Property radius
+    radius: 10
+    # World's spawn protection radius
+    spawn-radius: 500
+  # Points
+  points:
+    # Amount of guild points that guild starts with
+    default: 0
+  # Actions after successfully creating guild
+  create:
+    # Broadcast opts
+    broadcast:
+      # Send broadcast message
+      enable: true
+    # Private opts
+    private:
+      # Send private message
+      enable: false
+  # Actions after successfully deleting guild
+  delete:
+    # Broadcast opts
+    broadcast:
+      # Send broadcast message
+      enable: true
+    # Private opts
+    private:
+      # Send private message
+      enable: false
+  # Blocks options
+  blocks:
+    # Chests
+    chests:
+      # Allow chests opening
+      allow-open: false
+  # Cooldowns
+  cooldowns:
+    # Base teleportation cooldown
+    base-teleport: 5

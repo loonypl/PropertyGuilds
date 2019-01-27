@@ -1,0 +1,63 @@
+# PropertyGuilds plugin
+# © krzysek
+console-execute: 'You cannot execute this command from console state'
+no-permission: '&cYou do not have access to this command'
+wrong-syntax: '&cWrong syntax ! &f/guilds'
+plugin-reload: '&aPlugin has been reloaded'
+guilds-help:
+  - '&e/guilds &7- &fGuilds help'
+  - '&e/guilds items &7- &fItems needed for creating guild'
+  - '&e/guilds create [tag] [name] &7- &fCreate guild'
+  - '&e/guilds delete [tag] &7- &fDelete guild'
+  - '&e/guilds info [tag] &7- &fGuild info'
+  - '&e/guilds base &7- &fTeleport to guild base'
+  - '&e/guilds reload &7- &fReload plugin'
+none-create-require-items: '&cYou do not need any items for creating guild'
+create-require-items-gui-name: '&a&lRequired items'
+has-guild: '&cYou are already in guild'
+has-not-guild: '&cYou do not belong to any guild'
+guild-not-exists: '&cGuild %tag% does not exists'
+cannot-break: '&cThis block belongs to guild property'
+guild:
+  tag:
+    length: '&cTag length must be &f>= %min% &cand &f<= %max%'
+    exists: '&cGiven tag is already in-use'
+  name:
+    length: '&cName length must be &f>= %min% &cand &f<= %max%'
+    exists: '&cGiven name is already in-use'
+  property:
+    exists: '&cYou can not create guild on property of another one'
+    too-close: '&cYou are too close to property of another guild. You have to be at least &f%distance% &cblocks away from there'
+    too-close-spawn: '&cYou are too close to spawn. You have to be at least &f%distance% &cblocks away from spawn'
+  items:
+    not-enough: '&cYou dont have enough items to create guild &f/guilds items'
+  create:
+    broadcast:
+      message: '&8[&f%tag%&8] &f%name% &aguild has been created by &f%leader% &a!'
+    private:
+      enable: true
+      message: '&8[&f%tag%&8] &f%name% &aguild has been created by &f%leader% &a!'
+  delete:
+    not-leader: '&cYou are not leader of this guild'
+    broadcast:
+      message: '&8[&f%tag%&8] &f%name% &cguild has been deleted by &f%leader% &c!'
+    private:
+      enable: true
+      message: '&8[&f%tag%&8] &f%name% &cguild has been deleted by &f%leader% &c!'
+  blocks:
+    chests:
+      cannot-open: '&cYou can not open chests that belongs to other guilds'
+  teleport:
+    base:
+      remaining: '&aYou will be teleported to guild base in &f%time% seconds&a. Do not move'
+      abort: '&cBase teleportation has been aborted'
+      done: '&aYou have been teleported to your guild base'
+guild-info:
+  tag: 'Tag'
+  name: 'Name'
+  leader: 'Leader'
+  members-list: 'Members list'
+  alliances-list: 'Alliances list'
+  members: 'Members'
+  alliances: 'Alliances'
+  points: 'Points'
