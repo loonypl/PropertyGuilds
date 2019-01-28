@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.LinkedHashMap;
 
 public class PropertyGuilds extends JavaPlugin {
 
@@ -20,6 +21,7 @@ public class PropertyGuilds extends JavaPlugin {
     protected final FileConfiguration lang = new YamlConfiguration();
     protected static PropertyGuilds instance;
     protected MySQL mysql;
+    protected LinkedHashMap<String, Boolean> chatToggle = new LinkedHashMap<>();
 
     public static PropertyGuilds getInstance() {
         return instance;
@@ -65,6 +67,12 @@ public class PropertyGuilds extends JavaPlugin {
 
     protected void hookCommands() {
         getCommand("guilds").setExecutor(new Commands());
+    }
+
+    // LinkedHashMap chat
+
+    public LinkedHashMap<String, Boolean> getChatToggle() {
+        return this.chatToggle;
     }
 
     // Configurations

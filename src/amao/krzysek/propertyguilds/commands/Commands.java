@@ -4,6 +4,7 @@ import amao.krzysek.propertyguilds.PropertyGuilds;
 import amao.krzysek.propertyguilds.enums.ConfigMessageType;
 import amao.krzysek.propertyguilds.utils.config.ConfigUtils;
 import amao.krzysek.propertyguilds.utils.guild.Guild;
+import amao.krzysek.propertyguilds.utils.map.MapUtils;
 import amao.krzysek.propertyguilds.utils.mysql.MySQLUtils;
 import amao.krzysek.propertyguilds.utils.user.OfflineUser;
 import amao.krzysek.propertyguilds.utils.user.User;
@@ -19,9 +20,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 public class Commands implements CommandExecutor {
 
@@ -163,6 +164,7 @@ public class Commands implements CommandExecutor {
                         } else user.message(lang.getString("wrong-syntax"));
                     } else if (args[0].equalsIgnoreCase("base")) {
                         if (user.hasGuild()) {
+                            // TODO: better checking for teleport abort
                             final int teleportCooldown = config.getInt("guild.cooldowns.base-teleport");
                             user.message(lang.getString("guild.teleport.base.remaining").replaceAll("%time%", String.valueOf(teleportCooldown)));
                             final Location start = user.getPlayer().getLocation();
@@ -178,6 +180,21 @@ public class Commands implements CommandExecutor {
                                     } else user.message(lang.getString("guild.teleport.base.abort"));
                                 }
                             }.runTaskLater(PropertyGuilds.getInstance(), teleportCooldown * 20L);
+                        } else user.message(lang.getString("has-not-guild"));
+                    } else if (args[0].equalsIgnoreCase("top")) {
+                        final LinkedHashMap<String, Integer> sorted = MapUtils.sortValue(new MySQLUtils().getGuildsWithPoints());
+                        user.message("&7&l--------------- &e&lGuilds &7&l---------------");
+                        int count = 0;
+                        for (final Entry<String, Integer> entry : sorted.entrySet()) {
+                            user.message("&c&l" + (count + 1) + ". &8&l" + entry.getKey() + " &c" + entry.getValue());
+                            count++;
+                        }
+                        user.message("&7&l--------------- &e&lGuilds &7&l---------------");
+                    } else if (args[0].equalsIgnoreCase("chat")) {
+                        if (user.hasGuild()) {
+                            LinkedHashMap<String, Boolean> chatToggle = PropertyGuilds.getInstance().getChatToggle();
+                            if (chatToggle.containsKey(user.getPlayer().getName())) chatToggle.replace(user.getPlayer().getName(), (!(chatToggle.get(user.getPlayer().getName()))));
+                            else chatToggle.put(user.getPlayer().getName(), true);
                         } else user.message(lang.getString("has-not-guild"));
                     }
 

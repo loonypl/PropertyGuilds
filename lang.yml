@@ -11,6 +11,8 @@ guilds-help:
   - '&e/guilds delete [tag] &7- &fDelete guild'
   - '&e/guilds info [tag] &7- &fGuild info'
   - '&e/guilds base &7- &fTeleport to guild base'
+  - '&e/guilds chat &7- &fSwitch between global and guild chat'
+  - '&e/guilds top &7- &fTop 10 guilds'
   - '&e/guilds reload &7- &fReload plugin'
 none-create-require-items: '&cYou do not need any items for creating guild'
 create-require-items-gui-name: '&a&lRequired items'

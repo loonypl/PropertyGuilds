@@ -6,6 +6,7 @@ import amao.krzysek.propertyguilds.mysql.MySQL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 
 public class MySQLUtils {
 
@@ -57,6 +58,22 @@ public class MySQLUtils {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public LinkedHashMap<String, Integer> getGuildsWithPoints() {
+        LinkedHashMap<String, Integer> guilds = new LinkedHashMap<>();
+        try {
+            PreparedStatement ps = mysql.getConnection().prepareStatement(
+                    "SELECT * FROM `guilds`"
+            );
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) guilds.put(rs.getString("tag"), rs.getInt("points"));
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return guilds;
     }
 
 }

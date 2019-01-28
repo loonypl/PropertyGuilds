@@ -22,6 +22,10 @@ chat:
   # Chat format
   # %guild-tag%, %guild-name%, %guild-points%, %name%, %kills%, %deaths%, %points%, %world%, %message%
   format: '&8[&c&f%guild-tag%&8] &8[&6%points%&8] &r%name% &6> &r%message%'
+guild-chat:
+  # Guild chat format
+  # %guild-tag%, %guild-name%, %guild-points%, %name%, %kills%, %deaths%, %points%, %world%, %message%
+  format: '&c&l%guild-tag% &r%name% &6> &r&o%message%'
 create-require-items:
   # Need items for creating guild
   enable: true
