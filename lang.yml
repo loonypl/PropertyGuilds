@@ -31,6 +31,8 @@ guild:
     exists: '&cYou can not create guild on property of another one'
     too-close: '&cYou are too close to property of another guild. You have to be at least &f%distance% &cblocks away from there'
     too-close-spawn: '&cYou are too close to spawn. You have to be at least &f%distance% &cblocks away from spawn'
+    entered: '&cYou entered &7%tag% &cguild property'
+    left: '&aYou left &7%tag% &aguild property'
   items:
     not-enough: '&cYou dont have enough items to create guild &f/guilds items'
   create:
@@ -54,6 +56,9 @@ guild:
       remaining: '&aYou will be teleported to guild base in &f%time% seconds&a. Do not move'
       abort: '&cBase teleportation has been aborted'
       done: '&aYou have been teleported to your guild base'
+  chat:
+    global-toggle: '&aToggled to global chat'
+    guild-toggle: '&aToggled to guild chat'
 guild-info:
   tag: 'Tag'
   name: 'Name'

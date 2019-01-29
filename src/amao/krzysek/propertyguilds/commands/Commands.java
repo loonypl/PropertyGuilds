@@ -8,6 +8,7 @@ import amao.krzysek.propertyguilds.utils.map.MapUtils;
 import amao.krzysek.propertyguilds.utils.mysql.MySQLUtils;
 import amao.krzysek.propertyguilds.utils.user.OfflineUser;
 import amao.krzysek.propertyguilds.utils.user.User;
+import net.agentlv.namemanager.api.NameManagerAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -81,11 +82,13 @@ public class Commands implements CommandExecutor {
                                                                 guild.create();
                                                                 user.sendCreateSuccessMessage(tag, name, user.getPlayer().getName());
                                                                 user.getPlayer().getLocation().getBlock().setType(Material.BEDROCK);
+                                                                NameManagerAPI.setNametagPrefix(user.getPlayer(), ChatColor.translateAlternateColorCodes('&', "&8[&c" + tag + "&8] "));
                                                             } else {
                                                                 Guild guild = new Guild(tag, name, user.getPlayer().getName(), 1, user.getPlayer().getName(), 0, "", user.getPlayer().getLocation().getWorld().getName() + ";" + (int) user.getPlayer().getLocation().getX() + ";" + (int) user.getPlayer().getLocation().getY() + ";" + (int) user.getPlayer().getLocation().getZ(), config.getInt("guild.property.radius"), config.getInt("guild.points.default"));
                                                                 guild.create();
                                                                 user.sendCreateSuccessMessage(tag, name, user.getPlayer().getName());
                                                                 user.getPlayer().getLocation().getBlock().setType(Material.BEDROCK);
+                                                                NameManagerAPI.setNametagPrefix(user.getPlayer(), ChatColor.translateAlternateColorCodes('&', "&8[&c" + tag + "&8] "));
                                                             }
                                                         } else user.message(lang.getString("guild.property.too-close-spawn").replaceAll("%distance%", String.valueOf(config.getInt("guild.property.spawn-radius"))));
                                                     } else user.message(lang.getString("guild.property.too-close").replaceAll("%distance%", String.valueOf(config.getInt("guild.property.radius"))));
@@ -112,6 +115,7 @@ public class Commands implements CommandExecutor {
                                         new Location(Bukkit.getServer().getWorld(location[0]), Integer.parseInt(location[1]), Integer.parseInt(location[2]), Integer.parseInt(location[3])).getBlock().setType(Material.AIR);
                                         user.sendDeleteSuccessMessage(tag, guild.getInfo("name"),user.getPlayer().getName());
                                         guild.delete();
+                                        NameManagerAPI.setNametagPrefix(user.getPlayer(), "");
                                     } else user.message(lang.getString("guild.delete.not-leader"));
                                 } else user.message(lang.getString("guild-not-exists").replaceAll("%tag%", tag));
                             } else user.message(lang.getString("has-not-guild"));
@@ -193,8 +197,15 @@ public class Commands implements CommandExecutor {
                     } else if (args[0].equalsIgnoreCase("chat")) {
                         if (user.hasGuild()) {
                             LinkedHashMap<String, Boolean> chatToggle = PropertyGuilds.getInstance().getChatToggle();
-                            if (chatToggle.containsKey(user.getPlayer().getName())) chatToggle.replace(user.getPlayer().getName(), (!(chatToggle.get(user.getPlayer().getName()))));
-                            else chatToggle.put(user.getPlayer().getName(), true);
+                            if (chatToggle.containsKey(user.getPlayer().getName())) {
+                                chatToggle.replace(user.getPlayer().getName(), (!(chatToggle.get(user.getPlayer().getName()))));
+                                if (chatToggle.get(user.getPlayer().getName())) user.message(lang.getString("guild.chat.guild-toggle"));
+                                else user.message(lang.getString("guild.chat.global-toggle"));
+                            }
+                            else {
+                                chatToggle.put(user.getPlayer().getName(), true);
+                                user.message(lang.getString("guild.chat.guild-toggle"));
+                            }
                         } else user.message(lang.getString("has-not-guild"));
                     }
 

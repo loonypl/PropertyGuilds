@@ -53,17 +53,22 @@ public class PlayerChat implements Listener {
             } else message = e.getMessage();
             final String guildTag = user.getInfo("guild");
             Guild guild = new Guild(guildTag);
-            Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', config.getString("guild-chat.format"))
-                    .replaceAll("%guild-tag%", guildTag)
-                    .replaceAll("%guild-name%", guild.getInfo("name"))
-                    .replaceAll("%guild-points%", guild.getInfo("points"))
-                    .replaceAll("%name%", user.getPlayer().getDisplayName())
-                    .replaceAll("%kills%", user.getInfo("kills"))
-                    .replaceAll("%deaths%", user.getInfo("deaths"))
-                    .replaceAll("%points%", user.getInfo("points"))
-                    .replaceAll("%world%", user.getPlayer().getWorld().getName())
-                    .replaceAll("%message%", message)
-            );
+            final String members = guild.getInfo("members_list");
+            for (final String nickname : members.split(";")) {
+                if (Bukkit.getServer().getPlayer(nickname) != null) {
+                    new User(Bukkit.getServer().getPlayer(nickname)).message(ChatColor.translateAlternateColorCodes('&', config.getString("guild-chat.format"))
+                            .replaceAll("%guild-tag%", guildTag)
+                            .replaceAll("%guild-name%", guild.getInfo("name"))
+                            .replaceAll("%guild-points%", guild.getInfo("points"))
+                            .replaceAll("%name%", user.getPlayer().getDisplayName())
+                            .replaceAll("%kills%", user.getInfo("kills"))
+                            .replaceAll("%deaths%", user.getInfo("deaths"))
+                            .replaceAll("%points%", user.getInfo("points"))
+                            .replaceAll("%world%", user.getPlayer().getWorld().getName())
+                            .replaceAll("%message%", message)
+                    );
+                }
+            }
             e.setCancelled(true);
         }
     }
