@@ -4,6 +4,7 @@ import amao.krzysek.propertyguilds.PropertyGuilds;
 import amao.krzysek.propertyguilds.enums.ConfigMessageType;
 import amao.krzysek.propertyguilds.mysql.MySQL;
 import amao.krzysek.propertyguilds.utils.config.ConfigUtils;
+import amao.krzysek.propertyguilds.utils.guild.Guild;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -16,6 +17,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 public class User {
 
@@ -227,6 +230,44 @@ public class User {
         final String privateMessage = lang.getString("guild.delete.private.message");
         if (broadcastEnable) Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', broadcastMessage).replaceAll("%tag%", tag).replaceAll("%name%", name).replaceAll("%leader%", leader));
         if (privateEnable) message(privateMessage.replaceAll("%tag%", tag).replaceAll("%name%", name).replaceAll("%leader%", leader));
+    }
+
+    public boolean isLeader() {
+        return new Guild(getGuild()).getInfo("leader").equals(this.player.getName());
+    }
+
+    public boolean isInvited(final String guild) {
+        final LinkedHashMap<String, LinkedList<String>> invites = PropertyGuilds.getInstance().getInvites();
+        return invites.containsKey(this.player.getName()) && (invites.get(this.player.getName()).contains(guild));
+    }
+
+    public void setInvite(final String guild) {
+        final LinkedHashMap<String, LinkedList<String>> invites = PropertyGuilds.getInstance().getInvites();
+        if (invites.containsKey(this.player.getName())) invites.get(this.player.getName()).add(guild);
+        else {
+            invites.put(this.player.getName(), new LinkedList<>());
+            invites.get(this.player.getName()).add(guild);
+        }
+    }
+
+    public void removeInvite(final String guild) {
+        final LinkedHashMap<String, LinkedList<String>> invites = PropertyGuilds.getInstance().getInvites();
+        if (invites.containsKey(this.player.getName())) invites.get(this.player.getName()).remove(guild);
+    }
+
+    public void setGuild(final String tag) {
+        MySQL mysql = PropertyGuilds.getInstance().getMySQL();
+        try {
+            PreparedStatement psPlayer = mysql.getConnection().prepareStatement(
+                    "UPDATE `users` SET `guild`=? WHERE `name`=?"
+            );
+            psPlayer.setString(1, tag);
+            psPlayer.setString(2, this.player.getName());
+            psPlayer.executeUpdate();
+            psPlayer.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

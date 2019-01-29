@@ -1,5 +1,8 @@
 # PropertyGuilds plugin
-# © krzysek
+# version: 0.1
+# core: 1.13.2
+# © krzysek (deew)
+# Permissions: propertyguilds.default, propertyguilds.reload
 console-execute: 'You cannot execute this command from console state'
 no-permission: '&cYou do not have access to this command'
 wrong-syntax: '&cWrong syntax ! &f/guilds'
@@ -8,6 +11,11 @@ guilds-help:
   - '&e/guilds &7- &fGuilds help'
   - '&e/guilds items &7- &fItems needed for creating guild'
   - '&e/guilds create [tag] [name] &7- &fCreate guild'
+  - '&e/guilds invite [nick] &7- &fInvite player to guild'
+  - '&e/guilds accept [tag] &7- &fAccept guild invite'
+  - '&e/guilds decline [tag] &7- &fDecline guild invite'
+  - '&e/guilds leave &7- &fLeave guild'
+  - '&e/guilds kick [nick] &7- &fKick guild member'
   - '&e/guilds delete [tag] &7- &fDelete guild'
   - '&e/guilds info [tag] &7- &fGuild info'
   - '&e/guilds base &7- &fTeleport to guild base'
@@ -59,6 +67,37 @@ guild:
   chat:
     global-toggle: '&aToggled to global chat'
     guild-toggle: '&aToggled to guild chat'
+  invite:
+    not-leader: '&cYou are not leader of your guild'
+    offline: '&cThere is no online player with this nickname'
+    has-guild: '&cThis player already has guild'
+    already: '&cThis player is already invited'
+    sent: '&aYou have invited &f%invited% &ato guild'
+    recieved: '&aYou have been invited to &f%guild% &aguild'
+    already-member: '&cYou are already in guild'
+    guild-not-exists: '&cGuild with this tag does not exists'
+    not-invited: '&cYou have not been invited to this guild'
+    accepted: '&f%invited% &aaccepted invitation to guild'
+    success-accepted: '&aYou have accepted &f%guild% &aguild invite'
+    declined: '&f%invited% &cdeclined invitation to guild'
+    success-declined: '&cYou have declined &f%guild% &cguild invite'
+  leave:
+    leader: '&cYou can not leave a guild while being its leader'
+    left: '&cYou have left &f%guild% &cguild'
+    broadcast:
+      enable: true
+      left: '&f%player% &cleft &f%guild% &cguild'
+  kick:
+    leader: '&cYou are not guild leader'
+    has-not-guild: '&cThis player has not guild'
+    not-belong: '&cThis player do not belong to your guild'
+    leader-given: '&cYou can not kick leader'
+    kicked: '&f%player% &chas been kicked from your guild'
+    kick-recieve: '&cYou have been kicked from &f%guild% &cguild'
+  damage:
+    friendly-fire:
+      enable: true
+      message: '&cYou can not hurt guild members'
 guild-info:
   tag: 'Tag'
   name: 'Name'

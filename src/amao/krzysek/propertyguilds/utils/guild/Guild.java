@@ -94,4 +94,45 @@ public class Guild {
         }
     }
 
+    public void addMember(final String member) {
+        String members = getInfo("members");
+        String members_list = getInfo("members_list");
+        MySQL mysql = PropertyGuilds.getInstance().getMySQL();
+        try {
+            PreparedStatement ps = mysql.getConnection().prepareStatement(
+                    "UPDATE `guilds` SET `members`=?, `members_list`=? WHERE `tag`='" + this.tag + "'"
+            );
+            ps.setInt(1, Integer.parseInt(members) + 1);
+            ps.setString(2, members_list + ";" + member);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeMember(final String member) {
+        String members = getInfo("members");
+        final String members_list = getInfo("members_list");
+        String new_members_list = "";
+        for (final String player : members_list.split(";")) {
+            if (!(player.equalsIgnoreCase(member))) {
+                if (new_members_list.equals("")) new_members_list = player;
+                else new_members_list = new_members_list + ";" + player;
+            }
+        }
+        MySQL mysql = PropertyGuilds.getInstance().getMySQL();
+        try {
+            PreparedStatement ps = mysql.getConnection().prepareStatement(
+                    "UPDATE `guilds` SET `members`=?, `members_list`=? WHERE `tag` = '" + this.tag + "'"
+            );
+            ps.setInt(1, Integer.parseInt(members) - 1);
+            ps.setString(2, new_members_list);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 public class PropertyGuilds extends JavaPlugin {
 
@@ -22,6 +23,7 @@ public class PropertyGuilds extends JavaPlugin {
     protected static PropertyGuilds instance;
     protected MySQL mysql;
     protected LinkedHashMap<String, Boolean> chatToggle = new LinkedHashMap<>();
+    protected LinkedHashMap<String, LinkedList<String>> invites = new LinkedHashMap<>();
 
     public static PropertyGuilds getInstance() {
         return instance;
@@ -62,6 +64,7 @@ public class PropertyGuilds extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerChat(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerInteract(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerMove(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerDamage(), this);
     }
 
     // Commands
@@ -70,10 +73,14 @@ public class PropertyGuilds extends JavaPlugin {
         getCommand("guilds").setExecutor(new Commands());
     }
 
-    // LinkedHashMap chat
+    // LinkedHashMap
 
     public LinkedHashMap<String, Boolean> getChatToggle() {
         return this.chatToggle;
+    }
+
+    public LinkedHashMap<String, LinkedList<String>> getInvites() {
+        return this.invites;
     }
 
     // Configurations

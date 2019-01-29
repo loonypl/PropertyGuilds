@@ -76,13 +76,12 @@ public class Commands implements CommandExecutor {
                                                             if (config.getBoolean("create-require-items.enable")) {
                                                                 if (user.hasItemsForGuild()) {
                                                                     user.removeItemsForGuild();
-                                                                } else
-                                                                    user.message(lang.getString("guild.items.not-enough"));
-                                                                Guild guild = new Guild(tag, name, user.getPlayer().getName(), 1, user.getPlayer().getName(), 0, "", user.getPlayer().getLocation().getWorld().getName() + ";" + (int) user.getPlayer().getLocation().getX() + ";" + (int) user.getPlayer().getLocation().getY() + ";" + (int) user.getPlayer().getLocation().getZ(), config.getInt("guild.property.radius"), config.getInt("guild.points.default"));
-                                                                guild.create();
-                                                                user.sendCreateSuccessMessage(tag, name, user.getPlayer().getName());
-                                                                user.getPlayer().getLocation().getBlock().setType(Material.BEDROCK);
-                                                                NameManagerAPI.setNametagPrefix(user.getPlayer(), ChatColor.translateAlternateColorCodes('&', "&8[&c" + tag + "&8] "));
+                                                                    Guild guild = new Guild(tag, name, user.getPlayer().getName(), 1, user.getPlayer().getName(), 0, "", user.getPlayer().getLocation().getWorld().getName() + ";" + (int) user.getPlayer().getLocation().getX() + ";" + (int) user.getPlayer().getLocation().getY() + ";" + (int) user.getPlayer().getLocation().getZ(), config.getInt("guild.property.radius"), config.getInt("guild.points.default"));
+                                                                    guild.create();
+                                                                    user.sendCreateSuccessMessage(tag, name, user.getPlayer().getName());
+                                                                    user.getPlayer().getLocation().getBlock().setType(Material.BEDROCK);
+                                                                    NameManagerAPI.setNametagPrefix(user.getPlayer(), ChatColor.translateAlternateColorCodes('&', "&8[&c" + tag + "&8] "));
+                                                                } else user.message(lang.getString("guild.items.not-enough"));
                                                             } else {
                                                                 Guild guild = new Guild(tag, name, user.getPlayer().getName(), 1, user.getPlayer().getName(), 0, "", user.getPlayer().getLocation().getWorld().getName() + ";" + (int) user.getPlayer().getLocation().getX() + ";" + (int) user.getPlayer().getLocation().getY() + ";" + (int) user.getPlayer().getLocation().getZ(), config.getInt("guild.property.radius"), config.getInt("guild.points.default"));
                                                                 guild.create();
@@ -110,12 +109,12 @@ public class Commands implements CommandExecutor {
                                         for (final String memberString : mysqlMembersList) {
                                             OfflineUser offlineUser = new OfflineUser(memberString);
                                             offlineUser.setGuild(null);
+                                            if (Bukkit.getServer().getPlayer(memberString) != null) NameManagerAPI.clearNametag(Bukkit.getServer().getPlayer(memberString));
                                         }
                                         final String[] location = guild.getInfo("location").split(";");
                                         new Location(Bukkit.getServer().getWorld(location[0]), Integer.parseInt(location[1]), Integer.parseInt(location[2]), Integer.parseInt(location[3])).getBlock().setType(Material.AIR);
                                         user.sendDeleteSuccessMessage(tag, guild.getInfo("name"),user.getPlayer().getName());
                                         guild.delete();
-                                        NameManagerAPI.setNametagPrefix(user.getPlayer(), "");
                                     } else user.message(lang.getString("guild.delete.not-leader"));
                                 } else user.message(lang.getString("guild-not-exists").replaceAll("%tag%", tag));
                             } else user.message(lang.getString("has-not-guild"));
@@ -207,6 +206,95 @@ public class Commands implements CommandExecutor {
                                 user.message(lang.getString("guild.chat.guild-toggle"));
                             }
                         } else user.message(lang.getString("has-not-guild"));
+                    } else if (args[0].equals("invite")) {
+                        if (args.length == 2) {
+                            if (user.hasGuild()) {
+                                if (user.isLeader()) {
+                                    if (Bukkit.getServer().getPlayer(args[1]) != null) {
+                                        User online = new User(Bukkit.getServer().getPlayer(args[1]));
+                                        if (!(online.hasGuild())) {
+                                            final String tag = user.getGuild();
+                                            if (!(online.isInvited(tag))) {
+                                                online.setInvite(tag);
+                                                user.message(lang.getString("guild.invite.sent").replaceAll("%invited%", args[1]));
+                                                online.message(lang.getString("guild.invite.recieved").replaceAll("%guild%", tag));
+                                                new BukkitRunnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        online.removeInvite(tag);
+                                                    }
+                                                }.runTaskLaterAsynchronously(PropertyGuilds.getInstance(), 20L * 300); // removes invitation after 5 mins
+                                            } else user.message(lang.getString("guild.invite.already"));
+                                        } else user.message(lang.getString("guild.invite.has-guild"));
+                                    } else user.message(lang.getString("guild.invite.offline"));
+                                } else user.message(lang.getString("guild.invite.not-leader"));
+                            } else user.message(lang.getString("has-not-guild"));
+                        } else user.message(lang.getString("wrong-syntax"));
+                    } else if (args[0].equalsIgnoreCase("accept")) {
+                        if (args.length == 2) {
+                            if (!(user.hasGuild())) {
+                                final String tag = args[1].toUpperCase();
+                                if (new MySQLUtils().guildTagExists(tag)) {
+                                    if (user.isInvited(tag)) {
+                                        Guild guild = new Guild(tag);
+                                        guild.addMember(user.getPlayer().getName());
+                                        user.setGuild(tag);
+                                        user.removeInvite(tag);
+                                        user.message(lang.getString("guild.invite.success-accepted").replaceAll("%guild%", tag));
+                                        final String leader = guild.getInfo("leader");
+                                        if (Bukkit.getServer().getPlayer(leader) != null) new User(Bukkit.getServer().getPlayer(leader)).message(lang.getString("guild.invite.accepted").replaceAll("%invited%", user.getPlayer().getName()));
+                                        NameManagerAPI.setNametagPrefix(user.getPlayer(), ChatColor.translateAlternateColorCodes('&', "&8[&c" + tag + "&8] "));
+                                    } else user.message(lang.getString("guild.invite.not-invited"));
+                                } else user.message(lang.getString("guild.invite.guild-not-exists"));
+                            } else user.message(lang.getString("guild.invite.already-member"));
+                        } else user.message(lang.getString("wrong-syntax"));
+                    } else if (args[0].equalsIgnoreCase("decline")) {
+                        if (args.length == 2) {
+                            final String tag = args[1].toUpperCase();
+                            if (new MySQLUtils().guildTagExists(tag)) {
+                                if (user.isInvited(tag)) {
+                                    user.removeInvite(tag);
+                                    user.message(lang.getString("guild.invite.success-declined").replaceAll("%guild%", tag));
+                                    final String leader = new Guild(tag).getInfo("leader");
+                                    if (Bukkit.getServer().getPlayer(leader) != null) new User(Bukkit.getServer().getPlayer(leader)).message(lang.getString("guild.invite.declined").replaceAll("%invited%", user.getPlayer().getName()));
+                                } else user.message(lang.getString("guild.invite.not-invited"));
+                            } else user.message(lang.getString("guild.invite.guild-not-exists"));
+                        } else user.message(lang.getString("wrong-syntax"));
+                    } else if (args[0].equalsIgnoreCase("leave")) {
+                        if (user.hasGuild()) {
+                            if (!(user.isLeader())) {
+                                final String tag = user.getGuild();
+                                user.setGuild(null);
+                                new Guild(tag).removeMember(user.getPlayer().getName());
+                                if (lang.getBoolean("guild.leave.broadcast.enable")) Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', lang.getString("guild.leave.broadcast.left").replaceAll("%player%", user.getPlayer().getName()).replaceAll("%guild%", tag)));
+                                user.message(lang.getString("guild.leave.left").replaceAll("%guild%", tag));
+                                NameManagerAPI.clearNametag(user.getPlayer());
+                            } else user.message(lang.getString("guild.leave.leader"));
+                        } else user.message(lang.getString("has-not-guild"));
+                    } else if (args[0].equalsIgnoreCase("kick")) {
+                        if (args.length == 2) {
+                            if (user.hasGuild()) {
+                                if (user.isLeader()) {
+                                    OfflineUser kick = new OfflineUser(args[1]);
+                                    final String tag = user.getGuild();
+                                    if (kick.hasGuild()) {
+                                        if (!(kick.isLeader())) {
+                                            if (tag.equals(kick.getGuild())) {
+                                                Guild guild = new Guild(user.getGuild());
+                                                guild.removeMember(kick.getName());
+                                                kick.setGuild(null);
+                                                user.message(lang.getString("guild.kick.kicked").replaceAll("%player%", kick.getName()));
+                                                if (kick.isOnline()) {
+                                                    User kickOnline = new User(Bukkit.getServer().getPlayer(kick.getName()));
+                                                    kickOnline.message(lang.getString("guild.kick.kick-recieve").replaceAll("%guild%", tag));
+                                                    NameManagerAPI.clearNametag(kickOnline.getPlayer());
+                                                }
+                                            } else user.message(lang.getString("guild.kick.not-belong"));
+                                        } else user.message(lang.getString("guild.kick.leader-given"));
+                                    } else user.message(lang.getString("guild.kick.has-not-guild"));
+                                } else user.message(lang.getString("guild.kick.leader"));
+                            } else user.message(lang.getString("has-not-guild"));
+                        } else user.message(lang.getString("wrong-syntax"));
                     }
 
                     // TODO: wrong syntax
