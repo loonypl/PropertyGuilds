@@ -14,6 +14,10 @@ guilds-help:
   - '&e/guilds invite [nick] &7- &fInvite player to guild'
   - '&e/guilds accept [tag] &7- &fAccept guild invite'
   - '&e/guilds decline [tag] &7- &fDecline guild invite'
+  - '&e/guilds ally invite [tag] &7- &fSent ally invite to guild'
+  - '&e/guilds ally accept [tag] &7- &fAccept guild ally invite'
+  - '&e/guilds ally decline [tag] &7- &fDecline guild ally invite'
+  - '&e/guilds ally remove [tag] &7- &fRemove guild ally'
   - '&e/guilds leave &7- &fLeave guild'
   - '&e/guilds kick [nick] &7- &fKick guild member'
   - '&e/guilds delete [tag] &7- &fDelete guild'
@@ -98,6 +102,24 @@ guild:
     friendly-fire:
       enable: true
       message: '&cYou can not hurt guild members'
+  ally:
+    leader: '&cYou are not guild leader'
+    guild-not-exists: '&cGuild with this tag does not exists'
+    already-allied: '&cYour guild is already allied with this guild'
+    already-sent: '&cYour guild have already sent ally invite to this guild'
+    leader-not-online: '&cLeader of &f%guild% &cguild is not online'
+    own-guild: '&cYou can not sent ally invite to your own guild'
+    sent: '&aAlly invitation has been sent to &f%guild% &aguild'
+    ally-recieve: '&f%guild% &ahas sent your guild ally invitation'
+    not-recieved: '&cYour guild has not recieved ally invitation from this guild'
+    declined: '&cYour guild has declined ally invitation from &f%guild% &cguild'
+    accepted: '&aYour guild has accepted ally invitation form &f%guild% &aguild'
+    not-allied: '&cYour guild has not allied with &f%guild% &cguild'
+    remove:
+      removed-ally: '&cYour guild has removed guild ally &f%guild%'
+      broadcast:
+        enable: true
+        message: '&f%remover% &cguild has removed guild ally with &f%ally% &cguild'
 guild-info:
   tag: 'Tag'
   name: 'Name'

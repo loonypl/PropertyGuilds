@@ -24,6 +24,7 @@ public class PropertyGuilds extends JavaPlugin {
     protected MySQL mysql;
     protected LinkedHashMap<String, Boolean> chatToggle = new LinkedHashMap<>();
     protected LinkedHashMap<String, LinkedList<String>> invites = new LinkedHashMap<>();
+    protected LinkedHashMap<String, LinkedList<String>> alliances = new LinkedHashMap<>();
 
     public static PropertyGuilds getInstance() {
         return instance;
@@ -73,7 +74,7 @@ public class PropertyGuilds extends JavaPlugin {
         getCommand("guilds").setExecutor(new Commands());
     }
 
-    // LinkedHashMap
+    // LinkedHashMaps
 
     public LinkedHashMap<String, Boolean> getChatToggle() {
         return this.chatToggle;
@@ -81,6 +82,10 @@ public class PropertyGuilds extends JavaPlugin {
 
     public LinkedHashMap<String, LinkedList<String>> getInvites() {
         return this.invites;
+    }
+
+    public LinkedHashMap<String, LinkedList<String>> getAlliances() {
+        return this.alliances;
     }
 
     // Configurations

@@ -295,9 +295,88 @@ public class Commands implements CommandExecutor {
                                 } else user.message(lang.getString("guild.kick.leader"));
                             } else user.message(lang.getString("has-not-guild"));
                         } else user.message(lang.getString("wrong-syntax"));
+                    } else if (args[0].equalsIgnoreCase("ally")) {
+                        if (args.length == 3) {
+                            if (args[1].equalsIgnoreCase("invite")) {
+                                if (user.hasGuild()) {
+                                    if (user.isLeader()) {
+                                        final String tag = args[2].toUpperCase();
+                                        if (new MySQLUtils().guildTagExists(tag)) {
+                                            final String guildTag = user.getGuild();
+                                            Guild guild = new Guild(guildTag);
+                                            if (!(guildTag.equalsIgnoreCase(tag))) {
+                                                if (!(guild.isAllied(tag))) {
+                                                    if (!(guild.hasAllyInviteSent(tag))) {
+                                                        Guild invited = new Guild(tag);
+                                                        if (invited.isLeaderOnline()) {
+                                                            guild.sendAlly(tag);
+                                                            user.message(lang.getString("guild.ally.sent").replaceAll("%guild%", tag));
+                                                            new User(Bukkit.getServer().getPlayer(invited.getInfo("leader"))).message(lang.getString("guild.ally.ally-recieve").replaceAll("%guild%", guildTag));
+                                                            new BukkitRunnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    invited.deleteAllyInvite(guildTag);
+                                                                }
+                                                            }.runTaskLaterAsynchronously(PropertyGuilds.getInstance(), 20L * 300);
+                                                        } else
+                                                            user.message(lang.getString("guild.ally.leader-not-online").replaceAll("%guild%", tag));
+                                                    } else user.message(lang.getString("guild.ally.already-sent"));
+                                                } else user.message(lang.getString("guild.ally.already-allied"));
+                                            } else user.message(lang.getString("guild.ally.own-guild"));
+                                        } else user.message(lang.getString("guild.ally.guild-not-exists"));
+                                    } else user.message(lang.getString("guild.ally.leader"));
+                                } else user.message(lang.getString("has-not-guild"));
+                            } else if (args[1].equalsIgnoreCase("accept")) {
+                                if (user.hasGuild()) {
+                                    if (user.isLeader()) {
+                                        final String tag = args[2].toUpperCase();
+                                        if (new MySQLUtils().guildTagExists(tag)) {
+                                            Guild guild = new Guild(user.getGuild());
+                                            if (!(guild.isAllied(tag))) {
+                                                if (guild.recievedAllyInvite(tag)) {
+                                                    guild.acceptAlly(tag);
+                                                    user.message(lang.getString("guild.ally.accepted").replaceAll("%guild%", tag));
+                                                    Guild ally = new Guild(tag);
+                                                    if (ally.isLeaderOnline()) new User(Bukkit.getServer().getPlayer(ally.getInfo("leader"))).message(lang.getString("guild.ally.accepted-recieve").replaceAll("%guild%", user.getGuild()));
+                                                } else user.message(lang.getString("guild.ally.not-recieved"));
+                                            } else user.message(lang.getString("guild.ally.already-allied"));
+                                        } else user.message(lang.getString("guild.ally.guild-not-exists"));
+                                    } else user.message(lang.getString("guild.ally.leader"));
+                                } else user.message(lang.getString("has-not-guild"));
+                            } else if (args[1].equalsIgnoreCase("decline")) {
+                                if (user.hasGuild()) {
+                                    if (user.isLeader()) {
+                                        final String tag = args[2].toUpperCase();
+                                        if (new MySQLUtils().guildTagExists(tag)) {
+                                            Guild guild = new Guild(user.getGuild());
+                                            if (!(guild.isAllied(tag))) {
+                                                if (guild.recievedAllyInvite(tag)) {
+                                                    guild.declineAlly(tag);
+                                                    user.message(lang.getString("guild.ally.declined").replaceAll("%guild%", tag));
+                                                } else user.message(lang.getString("guild.ally.not-recieved"));
+                                            } else user.message(lang.getString("guild.ally.already-allied"));
+                                        } else user.message(lang.getString("guild.ally.guild-not-exists"));
+                                    } else user.message(lang.getString("guild.ally.leader"));
+                                } else user.message(lang.getString("has-not-guild"));
+                            } else if (args[1].equalsIgnoreCase("remove")) {
+                                if (user.hasGuild()) {
+                                    if (user.isLeader()) {
+                                        final String tag = args[2].toUpperCase();
+                                        if (new MySQLUtils().guildTagExists(tag)) {
+                                            Guild guild = new Guild(user.getGuild());
+                                            if (guild.isAllied(tag)) {
+                                                guild.removeAlly(tag);
+                                                user.message(lang.getString("guild.ally.remove.removed-ally").replaceAll("%guild%", tag));
+                                                if (lang.getBoolean("guild.ally.remove.broadcast.enable")) Bukkit.getServer().broadcastMessage(lang.getString("guild.ally.remove.broadcast.message").replaceAll("%remover%", user.getGuild()).replaceAll("%ally%", tag));
+                                            } else user.message(lang.getString("guild.ally.not-allied").replaceAll("%guild%", tag));
+                                        } else user.message(lang.getString("guild.ally.guild-not-exists"));
+                                    } else user.message(lang.getString("guild.ally.leader"));
+                                } else user.message(lang.getString("has-not-guild"));
+                            } else user.message(lang.getString("wrong-syntax"));
+                        } else user.message(lang.getString("wrong-syntax"));
                     }
 
-                    // TODO: wrong syntax
+                    else user.message(lang.getString("wrong-syntax"));
                 }
             } else {
                 sender.sendMessage(lang.getString("console-execute"));
