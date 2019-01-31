@@ -88,3 +88,29 @@ guild:
   cooldowns:
     # Base teleportation cooldown
     base-teleport: 5
+  # Damage
+  damage:
+    # Allow to deal damage between guild members
+    friendly-fire:
+      enable: false
+    # Allow to deal damage between alliances
+    alliances:
+      enable: false
+# Points
+points:
+  # Points for kill
+  kill:
+    # Points for killing player without guild
+    player-without-guild: 5
+    # Points for killing player with guild
+    player-with-guild: 10
+    # Points for kill that goes to player's guild [is he has]
+    to-guild: 5
+  # Points for death
+  death:
+    # Points for death (player without guild)
+    player-without-guild: -5
+    # Points for death (player with guild)
+    player-with-guild: -10
+    # Points for death that goes to player's guild [if he has]
+    to-guild: -5

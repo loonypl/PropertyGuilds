@@ -3,6 +3,7 @@ main: amao.krzysek.propertyguilds.PropertyGuilds
 description: Guilds system for your server
 version: 0.1
 author: krzysek (deew)
+depend: [NameManager]
 commands:
   guilds:
     description: Main command of PropertyGuilds

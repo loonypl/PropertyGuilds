@@ -15,6 +15,8 @@ import java.util.LinkedHashMap;
 
 public class PlayerChat implements Listener {
 
+    // TODO: Add alliances chat
+
     @EventHandler
     public void playerChat(final AsyncPlayerChatEvent e) {
         ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);

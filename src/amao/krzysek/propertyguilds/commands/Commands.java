@@ -138,7 +138,7 @@ public class Commands implements CommandExecutor {
                                 user.message("&7" + lang.getString("guild-info.members") + " &a" + members);
                                 user.message("&7" + lang.getString("guild-info.alliances") + " &a" + alliances);
                                 user.message("&7" + lang.getString("guild-info.members-list") + " &a" + members_list.replaceAll(";", ", "));
-                                user.message("&7" + lang.getString("guild-info.alliances-list") + " &a" + alliances_list);
+                                user.message("&7" + lang.getString("guild-info.alliances-list") + " &a" + alliances_list.replaceAll(";", ", "));
                                 user.message("&7" + lang.getString("guild-info.points") + " &a" + points);
                                 user.message("&7&l--------------- &e&lGuilds &7&l---------------");
                             } else user.message(lang.getString("has-not-guild"));
@@ -160,7 +160,7 @@ public class Commands implements CommandExecutor {
                                 user.message("&7" + lang.getString("guild-info.members") + " &a" + members);
                                 user.message("&7" + lang.getString("guild-info.alliances") + " &a" + alliances);
                                 user.message("&7" + lang.getString("guild-info.members-list") + " &a" + members_list.replaceAll(";", ", "));
-                                user.message("&7" + lang.getString("guild-info.alliances-list") + " &a" + alliances_list);
+                                user.message("&7" + lang.getString("guild-info.alliances-list") + " &a" + alliances_list.replaceAll(";", ", "));
                                 user.message("&7" + lang.getString("guild-info.points") + " &a" + points);
                                 user.message("&7&l--------------- &e&lGuilds &7&l---------------");
                             } else user.message(lang.getString("guild-not-exists").replaceAll("%tag%", args[1]));
@@ -317,7 +317,7 @@ public class Commands implements CommandExecutor {
                                                                 public void run() {
                                                                     invited.deleteAllyInvite(guildTag);
                                                                 }
-                                                            }.runTaskLaterAsynchronously(PropertyGuilds.getInstance(), 20L * 300);
+                                                            }.runTaskLaterAsynchronously(PropertyGuilds.getInstance(), 20L * 300); // remove invitation after 5 mins
                                                         } else
                                                             user.message(lang.getString("guild.ally.leader-not-online").replaceAll("%guild%", tag));
                                                     } else user.message(lang.getString("guild.ally.already-sent"));
@@ -335,6 +335,7 @@ public class Commands implements CommandExecutor {
                                             if (!(guild.isAllied(tag))) {
                                                 if (guild.recievedAllyInvite(tag)) {
                                                     guild.acceptAlly(tag);
+                                                    guild.acceptAllySide(tag);
                                                     user.message(lang.getString("guild.ally.accepted").replaceAll("%guild%", tag));
                                                     Guild ally = new Guild(tag);
                                                     if (ally.isLeaderOnline()) new User(Bukkit.getServer().getPlayer(ally.getInfo("leader"))).message(lang.getString("guild.ally.accepted-recieve").replaceAll("%guild%", user.getGuild()));
@@ -366,8 +367,9 @@ public class Commands implements CommandExecutor {
                                             Guild guild = new Guild(user.getGuild());
                                             if (guild.isAllied(tag)) {
                                                 guild.removeAlly(tag);
+                                                guild.removeAllySide(tag);
                                                 user.message(lang.getString("guild.ally.remove.removed-ally").replaceAll("%guild%", tag));
-                                                if (lang.getBoolean("guild.ally.remove.broadcast.enable")) Bukkit.getServer().broadcastMessage(lang.getString("guild.ally.remove.broadcast.message").replaceAll("%remover%", user.getGuild()).replaceAll("%ally%", tag));
+                                                if (lang.getBoolean("guild.ally.remove.broadcast.enable")) Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', lang.getString("guild.ally.remove.broadcast.message").replaceAll("%remover%", user.getGuild()).replaceAll("%ally%", tag)));
                                             } else user.message(lang.getString("guild.ally.not-allied").replaceAll("%guild%", tag));
                                         } else user.message(lang.getString("guild.ally.guild-not-exists"));
                                     } else user.message(lang.getString("guild.ally.leader"));

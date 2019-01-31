@@ -32,6 +32,10 @@ public class Guild {
         this.tag = tag;
     }
 
+    public final String getTag() {
+        return this.tag;
+    }
+
     public void create() {
         MySQL mysql = PropertyGuilds.getInstance().getMySQL();
         try {
@@ -190,7 +194,29 @@ public class Guild {
                     "UPDATE `guilds` SET `alliances`=?, `alliances_list`=? WHERE `tag`='" + this.tag + "'"
             );
             ps.setInt(1, Integer.parseInt(alliances_mysql) + 1);
-            ps.setString(2, alliances_list + ";" + tag);
+            if (!(alliances_list.equals(""))) ps.setString(2, alliances_list + ";" + tag);
+            else ps.setString(2, alliances_list + tag);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void acceptAllySide(final String tag) {
+        LinkedHashMap<String, LinkedList<String>> alliances = PropertyGuilds.getInstance().getAlliances();
+        if (alliances.containsKey(tag) && alliances.get(tag).contains(this.tag)) alliances.get(tag).remove(this.tag);
+        Guild ally = new Guild(tag);
+        String alliances_mysql = ally.getInfo("alliances");
+        String alliances_list = ally.getInfo("alliances_list");
+        MySQL mysql = PropertyGuilds.getInstance().getMySQL();
+        try {
+            PreparedStatement ps = mysql.getConnection().prepareStatement(
+                    "UPDATE `guilds` SET `alliances`=?, `alliances_list`=? WHERE `tag`='" + tag + "'"
+            );
+            ps.setInt(1, Integer.parseInt(alliances_mysql) + 1);
+            if (!(alliances_list.equals(""))) ps.setString(2, alliances_list + ";" + this.tag);
+            else ps.setString(2, alliances_list + this.tag);
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
@@ -217,6 +243,46 @@ public class Guild {
             ps.setString(2, new_alliances_list);
             ps.executeUpdate();
             ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeAllySide(final String tag) {
+        Guild ally = new Guild(tag);
+        String alliances = ally.getInfo("alliances");
+        final String alliances_list = ally.getInfo("alliances_list");
+        String new_alliances_list = "";
+        for (final String a : alliances_list.split(";")) {
+            if (!(a.equalsIgnoreCase(this.tag))) {
+                if (new_alliances_list.equals("")) new_alliances_list = a;
+                else new_alliances_list = new_alliances_list + ";" + a;
+            }
+        }
+        MySQL mysql = PropertyGuilds.getInstance().getMySQL();
+        try {
+            PreparedStatement ps = mysql.getConnection().prepareStatement(
+                    "UPDATE `guilds` SET `alliances`=?, `alliances_list`=? WHERE `tag` = '" + tag + "'"
+            );
+            ps.setInt(1, Integer.parseInt(alliances) - 1);
+            ps.setString(2, new_alliances_list);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void points(final int p) {
+        MySQL mysql = PropertyGuilds.getInstance().getMySQL();
+        try {
+            PreparedStatement psPlayer = mysql.getConnection().prepareStatement(
+                    "UPDATE `guilds` SET `points`=? WHERE `tag`=?"
+            );
+            psPlayer.setInt(1, Integer.parseInt(getInfo("points")) + p);
+            psPlayer.setString(2, this.tag);
+            psPlayer.executeUpdate();
+            psPlayer.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

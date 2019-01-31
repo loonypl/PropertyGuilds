@@ -66,6 +66,7 @@ public class PropertyGuilds extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerInteract(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerMove(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerDamage(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerDeath(), this);
     }
 
     // Commands

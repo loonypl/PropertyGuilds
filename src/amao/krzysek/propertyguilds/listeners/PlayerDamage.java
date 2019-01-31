@@ -2,6 +2,7 @@ package amao.krzysek.propertyguilds.listeners;
 
 import amao.krzysek.propertyguilds.enums.ConfigMessageType;
 import amao.krzysek.propertyguilds.utils.config.ConfigUtils;
+import amao.krzysek.propertyguilds.utils.guild.Guild;
 import amao.krzysek.propertyguilds.utils.user.User;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,11 +18,23 @@ public class PlayerDamage implements Listener {
             if (user.hasGuild()) {
                 final User damager = new User((Player) e.getDamager());
                 if (damager.hasGuild()) {
-                    if (user.getGuild().equals(damager.getGuild())) {
+                    Guild userGuild = new Guild(user.getGuild());
+                    Guild damagerGuild = new Guild(damager.getGuild());
+                    if (userGuild.getTag().equals(damagerGuild.getTag())) {
+                        ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);
                         ConfigUtils lang = new ConfigUtils(ConfigMessageType.LANG);
-                        if (lang.getBoolean("guild.damage.friendly-fire.enable")) damager.message(lang.getString("guild.damage.friendly-fire.message"));
+                        if (!(config.getBoolean("guild.damage.friendly-fire.enable"))) {
+                            damager.message(lang.getString("guild.damage.friendly-fire.message"));
+                            e.setCancelled(true);
+                        }
+                    } else if (userGuild.isAllied(damagerGuild.getTag())) {
+                        ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);
+                        ConfigUtils lang = new ConfigUtils(ConfigMessageType.LANG);
+                        if (!(config.getBoolean("guild.damage.alliances.enable"))) {
+                            damager.message(lang.getString("guild.damage.alliances.message"));
+                            e.setCancelled(true);
+                        }
                     }
-                    e.setCancelled(true);
                 }
             }
         }

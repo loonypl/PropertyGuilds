@@ -270,4 +270,19 @@ public class User {
         }
     }
 
+    public void updateStats(final String stat, final int p) {
+        MySQL mysql = PropertyGuilds.getInstance().getMySQL();
+        try {
+            PreparedStatement psPlayer = mysql.getConnection().prepareStatement(
+                    "UPDATE `users` SET `" + stat + "`=? WHERE `name`=?"
+            );
+            psPlayer.setInt(1, Integer.parseInt(getInfo(stat)) + p);
+            psPlayer.setString(2, this.player.getName());
+            psPlayer.executeUpdate();
+            psPlayer.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -100,8 +100,9 @@ guild:
     kick-recieve: '&cYou have been kicked from &f%guild% &cguild'
   damage:
     friendly-fire:
-      enable: true
       message: '&cYou can not hurt guild members'
+    alliances:
+      message: '&cYou can not hurt alliances of your guild'
   ally:
     leader: '&cYou are not guild leader'
     guild-not-exists: '&cGuild with this tag does not exists'
@@ -114,6 +115,7 @@ guild:
     not-recieved: '&cYour guild has not recieved ally invitation from this guild'
     declined: '&cYour guild has declined ally invitation from &f%guild% &cguild'
     accepted: '&aYour guild has accepted ally invitation form &f%guild% &aguild'
+    accepted-recieve: '&f%guild% &aguild has accepted your guild ally invitation'
     not-allied: '&cYour guild has not allied with &f%guild% &cguild'
     remove:
       removed-ally: '&cYour guild has removed guild ally &f%guild%'
