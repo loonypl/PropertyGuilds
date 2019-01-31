@@ -1,6 +1,6 @@
 # PropertyGuilds
 ## Guild system for Minecraft 1.13.2 server
-![PropertyGuilds](https://imgur.com/a/6bq359u)
+![PropertyGuilds](https://i.imgur.com/QWu1DYg.png)
 #
 ***Dependencies***: [NameManager (https://www.spigotmc.org/resources/namemanager.5147/)]
 #
