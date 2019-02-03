@@ -1,6 +1,7 @@
 package amao.krzysek.propertyguilds;
 
 import amao.krzysek.propertyguilds.commands.Commands;
+import amao.krzysek.propertyguilds.enums.ChatType;
 import amao.krzysek.propertyguilds.listeners.*;
 import amao.krzysek.propertyguilds.mysql.MySQL;
 import org.bukkit.Bukkit;
@@ -23,7 +24,7 @@ public class PropertyGuilds extends JavaPlugin {
     protected final FileConfiguration lang = new YamlConfiguration();
     protected static PropertyGuilds instance;
     protected MySQL mysql;
-    protected LinkedHashMap<String, Boolean> chatToggle = new LinkedHashMap<>();
+    protected LinkedHashMap<String, ChatType> chatToggle = new LinkedHashMap<>();
     protected LinkedHashMap<String, LinkedList<String>> invites = new LinkedHashMap<>();
     protected LinkedHashMap<String, LinkedList<String>> alliances = new LinkedHashMap<>();
     protected LinkedHashMap<String, Location> baseCooldown = new LinkedHashMap<>();
@@ -78,8 +79,8 @@ public class PropertyGuilds extends JavaPlugin {
     }
 
     // LinkedHashMaps
-
-    public LinkedHashMap<String, Boolean> getChatToggle() {
+    
+    public LinkedHashMap<String, ChatType> getChatToggle() {
         return this.chatToggle;
     }
 

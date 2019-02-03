@@ -26,6 +26,10 @@ guild-chat:
   # Guild chat format
   # %guild-tag%, %guild-name%, %guild-points%, %name%, %kills%, %deaths%, %points%, %world%, %message%
   format: '&c&l%guild-tag% &r%name% &6> &r&o%message%'
+ally-chat:
+  # Ally chat format
+  # %guild-tag%, %guild-name%, %guild-points%, %name%, %kills%, %deaths%, %points%, %world%, %message%
+  format: '&a&l%guild-tag% &r%name% &6> &r&o%message%'
 create-require-items:
   # Need items for creating guild
   enable: true

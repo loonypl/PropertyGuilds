@@ -1,6 +1,7 @@
 package amao.krzysek.propertyguilds.commands;
 
 import amao.krzysek.propertyguilds.PropertyGuilds;
+import amao.krzysek.propertyguilds.enums.ChatType;
 import amao.krzysek.propertyguilds.enums.ConfigMessageType;
 import amao.krzysek.propertyguilds.utils.config.ConfigUtils;
 import amao.krzysek.propertyguilds.utils.guild.Guild;
@@ -194,18 +195,24 @@ public class Commands implements CommandExecutor {
                         }
                         user.message("&7&l--------------- &e&lGuilds &7&l---------------");
                     } else if (args[0].equalsIgnoreCase("chat")) {
-                        if (user.hasGuild()) {
-                            LinkedHashMap<String, Boolean> chatToggle = PropertyGuilds.getInstance().getChatToggle();
-                            if (chatToggle.containsKey(user.getPlayer().getName())) {
-                                chatToggle.replace(user.getPlayer().getName(), (!(chatToggle.get(user.getPlayer().getName()))));
-                                if (chatToggle.get(user.getPlayer().getName())) user.message(lang.getString("guild.chat.guild-toggle"));
-                                else user.message(lang.getString("guild.chat.global-toggle"));
-                            }
-                            else {
-                                chatToggle.put(user.getPlayer().getName(), true);
-                                user.message(lang.getString("guild.chat.guild-toggle"));
-                            }
-                        } else user.message(lang.getString("has-not-guild"));
+                        if (args.length == 2) {
+                            if (user.hasGuild()) {
+                                LinkedHashMap<String, ChatType> chatToggle = PropertyGuilds.getInstance().getChatToggle();
+                                if (args[1].equalsIgnoreCase("global")) {
+                                    if (chatToggle.containsKey(user.getPlayer().getName())) chatToggle.replace(user.getPlayer().getName(), ChatType.GLOBAL);
+                                    else chatToggle.put(user.getPlayer().getName(), ChatType.GLOBAL);
+                                    user.message(lang.getString("guild.chat.global-toggle"));
+                                } else if (args[1].equalsIgnoreCase("guild")) {
+                                    if (chatToggle.containsKey(user.getPlayer().getName())) chatToggle.replace(user.getPlayer().getName(), ChatType.GUILD);
+                                    else chatToggle.put(user.getPlayer().getName(), ChatType.GUILD);
+                                    user.message(lang.getString("guild.chat.guild-toggle"));
+                                } else if (args[1].equalsIgnoreCase("ally")) {
+                                    if (chatToggle.containsKey(user.getPlayer().getName())) chatToggle.replace(user.getPlayer().getName(), ChatType.ALLY);
+                                    else chatToggle.put(user.getPlayer().getName(), ChatType.ALLY);
+                                    user.message(lang.getString("guild.chat.ally-toggle"));
+                                } else user.message(lang.getString("wrong-syntax"));
+                            } else user.message(lang.getString("has-not-guild"));
+                        } else user.message(lang.getString("wrong-syntax"));
                     } else if (args[0].equals("invite")) {
                         if (args.length == 2) {
                             if (user.hasGuild()) {

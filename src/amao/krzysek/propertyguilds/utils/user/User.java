@@ -1,6 +1,7 @@
 package amao.krzysek.propertyguilds.utils.user;
 
 import amao.krzysek.propertyguilds.PropertyGuilds;
+import amao.krzysek.propertyguilds.enums.ChatType;
 import amao.krzysek.propertyguilds.enums.ConfigMessageType;
 import amao.krzysek.propertyguilds.mysql.MySQL;
 import amao.krzysek.propertyguilds.utils.config.ConfigUtils;
@@ -306,6 +307,11 @@ public class User {
     public void removeBaseTeleportListener() {
         LinkedHashMap<String, Location> baseTeleport = PropertyGuilds.getInstance().getBaseCooldown();
         baseTeleport.remove(this.player.getName());
+    }
+
+    public ChatType getChatType() {
+        if (PropertyGuilds.getInstance().getChatToggle().containsKey(this.player.getName())) return PropertyGuilds.getInstance().getChatToggle().get(this.player.getName());
+        else return ChatType.NULL;
     }
 
 }

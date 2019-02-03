@@ -72,6 +72,7 @@ guild:
   chat:
     global-toggle: '&aToggled to global chat'
     guild-toggle: '&aToggled to guild chat'
+    ally-toggle: '&aToggled to ally chat'
   invite:
     not-leader: '&cYou are not leader of your guild'
     offline: '&cThere is no online player with this nickname'
