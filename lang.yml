@@ -1,7 +1,7 @@
 # PropertyGuilds plugin
 # version: 0.1
 # core: 1.13.2
-# © krzysek (deew)
+# © loonypl (/deew, mc: krzysek)
 # Permissions: propertyguilds.default, propertyguilds.reload
 console-execute: 'You cannot execute this command from console state'
 no-permission: '&cYou do not have access to this command'
@@ -68,6 +68,7 @@ guild:
       remaining: '&aYou will be teleported to guild base in &f%time% seconds&a. Do not move'
       abort: '&cBase teleportation has been aborted'
       done: '&aYou have been teleported to your guild base'
+      already: '&aWait for teleport. Do not move'
   chat:
     global-toggle: '&aToggled to global chat'
     guild-toggle: '&aToggled to guild chat'

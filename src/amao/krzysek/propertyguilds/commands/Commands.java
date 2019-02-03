@@ -167,22 +167,22 @@ public class Commands implements CommandExecutor {
                         } else user.message(lang.getString("wrong-syntax"));
                     } else if (args[0].equalsIgnoreCase("base")) {
                         if (user.hasGuild()) {
-                            // TODO: better checking for teleport abort
                             final int teleportCooldown = config.getInt("guild.cooldowns.base-teleport");
                             user.message(lang.getString("guild.teleport.base.remaining").replaceAll("%time%", String.valueOf(teleportCooldown)));
-                            final Location start = user.getPlayer().getLocation();
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    final Location end = user.getPlayer().getLocation();
-                                    if ((int)start.getX() == (int)end.getX() && (int)start.getY() == (int)end.getY() && (int)start.getZ() == (int)end.getZ()) {
-                                        Guild guild = new Guild(user.getGuild());
-                                        final String[] loc = guild.getInfo("location").split(";");
-                                        user.getPlayer().teleport(new Location(Bukkit.getServer().getWorld(loc[0]), Integer.parseInt(loc[1]), Integer.parseInt(loc[2]) + 1, Integer.parseInt(loc[3])));
-                                        user.message(lang.getString("guild.teleport.base.done"));
-                                    } else user.message(lang.getString("guild.teleport.base.abort"));
-                                }
-                            }.runTaskLater(PropertyGuilds.getInstance(), teleportCooldown * 20L);
+                            if (user.setBaseTeleportListener()) {
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        if (user.waitingForBaseTeleport()) {
+                                            Guild guild = new Guild(user.getGuild());
+                                            final String[] loc = guild.getInfo("location").split(";");
+                                            user.getPlayer().teleport(new Location(Bukkit.getServer().getWorld(loc[0]), Integer.parseInt(loc[1]), Integer.parseInt(loc[2]) + 1, Integer.parseInt(loc[3])));
+                                            user.message(lang.getString("guild.teleport.base.done"));
+                                            user.removeBaseTeleportListener();
+                                        }
+                                    }
+                                }.runTaskLaterAsynchronously(PropertyGuilds.getInstance(), teleportCooldown * 20L);
+                            } else user.message(lang.getString("guild.teleport.base.already"));
                         } else user.message(lang.getString("has-not-guild"));
                     } else if (args[0].equalsIgnoreCase("top")) {
                         final LinkedHashMap<String, Integer> sorted = MapUtils.sortValue(new MySQLUtils().getGuildsWithPoints());

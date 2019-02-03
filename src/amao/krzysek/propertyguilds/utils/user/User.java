@@ -285,4 +285,27 @@ public class User {
         }
     }
 
+    public boolean setBaseTeleportListener() {
+        LinkedHashMap<String, Location> baseTeleport = PropertyGuilds.getInstance().getBaseCooldown();
+        if (!(baseTeleport.containsKey(this.player.getName()))) {
+            baseTeleport.put(this.player.getName(), this.player.getLocation());
+            return true;
+        } else return false;
+    }
+
+    public boolean waitingForBaseTeleport() {
+        return (PropertyGuilds.getInstance().getBaseCooldown().containsKey(this.player.getName()));
+    }
+
+    public boolean changedLocationBaseTeleport(final Location location) {
+        LinkedHashMap<String, Location> baseTeleport = PropertyGuilds.getInstance().getBaseCooldown();
+        final Location start = baseTeleport.get(this.player.getName());
+        return (!((int)start.getX() == (int)location.getX() && (int)start.getY() == (int)location.getY() && (int)start.getZ() == (int)location.getZ()));
+    }
+
+    public void removeBaseTeleportListener() {
+        LinkedHashMap<String, Location> baseTeleport = PropertyGuilds.getInstance().getBaseCooldown();
+        baseTeleport.remove(this.player.getName());
+    }
+
 }

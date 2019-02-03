@@ -12,19 +12,25 @@ public class PlayerMove implements Listener {
 
     @EventHandler
     public void playerMove(final PlayerMoveEvent e) {
+        User user = new User(e.getPlayer());
         LocationUtils from = new LocationUtils(e.getFrom());
         LocationUtils to = new LocationUtils(e.getTo());
         if (from.atGuildProperty()) {
             if (!(to.atGuildProperty())) {
                 // greetings
-                User user = new User(e.getPlayer());
                 user.message(new ConfigUtils(ConfigMessageType.LANG).getString("guild.property.entered").replaceAll("%tag%", to.getGuild()));
             }
         } else if (!(from.atGuildProperty())) {
             if (to.atGuildProperty()) {
                 // farewell
-                User user = new User(e.getPlayer());
                 user.message(new ConfigUtils(ConfigMessageType.LANG).getString("guild.property.left").replaceAll("%tag%", from.getGuild()));
+            }
+        }
+        // awaiting base teleport
+        if (user.waitingForBaseTeleport()) {
+            if (user.changedLocationBaseTeleport(e.getTo())) {
+                user.removeBaseTeleportListener();
+                user.message(new ConfigUtils(ConfigMessageType.LANG).getString("guild.teleport.base.abort"));
             }
         }
     }

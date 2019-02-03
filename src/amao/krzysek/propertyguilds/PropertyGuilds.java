@@ -4,6 +4,7 @@ import amao.krzysek.propertyguilds.commands.Commands;
 import amao.krzysek.propertyguilds.listeners.*;
 import amao.krzysek.propertyguilds.mysql.MySQL;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +26,7 @@ public class PropertyGuilds extends JavaPlugin {
     protected LinkedHashMap<String, Boolean> chatToggle = new LinkedHashMap<>();
     protected LinkedHashMap<String, LinkedList<String>> invites = new LinkedHashMap<>();
     protected LinkedHashMap<String, LinkedList<String>> alliances = new LinkedHashMap<>();
+    protected LinkedHashMap<String, Location> baseCooldown = new LinkedHashMap<>();
 
     public static PropertyGuilds getInstance() {
         return instance;
@@ -87,6 +89,10 @@ public class PropertyGuilds extends JavaPlugin {
 
     public LinkedHashMap<String, LinkedList<String>> getAlliances() {
         return this.alliances;
+    }
+
+    public LinkedHashMap<String, Location> getBaseCooldown() {
+        return this.baseCooldown;
     }
 
     // Configurations
