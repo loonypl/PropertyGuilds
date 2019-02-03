@@ -24,7 +24,7 @@
 * */guilds delete [tag]* - Deletes guild
 * */guilds info [tag]* - Guild's info ([tag] isn't necessarily)
 * */guilds base* - Teleports to guild's base
-* */guilds chat* - Toggles between global and guild chat
+* */guilds chat [global/guild/ally]* - Toggles between chats
 * */guilds top* - Shows top 10 guilds
 * */guilds reload* - Reloads plugin
 #
@@ -33,7 +33,7 @@
 # PropertyGuilds plugin
 # version: 0.1
 # core: 1.13.2
-# © krzysek (deew)
+# © loonypl (/deew, mc: krzysek)
 # Permissions: propertyguilds.default, propertyguilds.reload
 # MySQL configuration
 #  host - MySQL server address
@@ -58,6 +58,10 @@ guild-chat:
   # Guild chat format
   # %guild-tag%, %guild-name%, %guild-points%, %name%, %kills%, %deaths%, %points%, %world%, %message%
   format: '&c&l%guild-tag% &r%name% &6> &r&o%message%'
+ally-chat:
+  # Ally chat format
+  # %guild-tag%, %guild-name%, %guild-points%, %name%, %kills%, %deaths%, %points%, %world%, %message%
+  format: '&a&l%guild-tag% &r%name% &6> &r&o%message%'
 create-require-items:
   # Need items for creating guild
   enable: true
@@ -153,7 +157,7 @@ points:
 # PropertyGuilds plugin
 # version: 0.1
 # core: 1.13.2
-# © krzysek (deew)
+# © loonypl (/deew, mc: krzysek)
 # Permissions: propertyguilds.default, propertyguilds.reload
 console-execute: 'You cannot execute this command from console state'
 no-permission: '&cYou do not have access to this command'
@@ -175,7 +179,7 @@ guilds-help:
   - '&e/guilds delete [tag] &7- &fDelete guild'
   - '&e/guilds info [tag] &7- &fGuild info'
   - '&e/guilds base &7- &fTeleport to guild base'
-  - '&e/guilds chat &7- &fSwitch between global and guild chat'
+  - '&e/guilds chat [global/guild/ally] &7- &fSwitch between chats'
   - '&e/guilds top &7- &fTop 10 guilds'
   - '&e/guilds reload &7- &fReload plugin'
 none-create-require-items: '&cYou do not need any items for creating guild'
@@ -220,9 +224,11 @@ guild:
       remaining: '&aYou will be teleported to guild base in &f%time% seconds&a. Do not move'
       abort: '&cBase teleportation has been aborted'
       done: '&aYou have been teleported to your guild base'
+      already: '&aWait for teleport. Do not move'
   chat:
     global-toggle: '&aToggled to global chat'
     guild-toggle: '&aToggled to guild chat'
+    ally-toggle: '&aToggled to ally chat'
   invite:
     not-leader: '&cYou are not leader of your guild'
     offline: '&cThere is no online player with this nickname'
