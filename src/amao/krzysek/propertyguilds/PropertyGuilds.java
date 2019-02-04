@@ -79,7 +79,7 @@ public class PropertyGuilds extends JavaPlugin {
     }
 
     // LinkedHashMaps
-    
+
     public LinkedHashMap<String, ChatType> getChatToggle() {
         return this.chatToggle;
     }

@@ -8,6 +8,7 @@ import amao.krzysek.propertyguilds.utils.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
@@ -17,7 +18,7 @@ import java.sql.SQLException;
 
 public class BlockPlace implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void blockPlace(final BlockPlaceEvent e) {
         MySQL mysql = PropertyGuilds.getInstance().getMySQL();
         try {

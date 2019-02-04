@@ -5,12 +5,13 @@ import amao.krzysek.propertyguilds.utils.config.ConfigUtils;
 import amao.krzysek.propertyguilds.utils.guild.Guild;
 import amao.krzysek.propertyguilds.utils.user.User;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class PlayerDeath implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void playerDeath(final PlayerDeathEvent e) {
         if (e.getEntity().getKiller() != null) {
             ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);

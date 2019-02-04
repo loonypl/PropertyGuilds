@@ -6,12 +6,13 @@ import amao.krzysek.propertyguilds.utils.guild.Guild;
 import amao.krzysek.propertyguilds.utils.user.User;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class PlayerDamage implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void playerDamage(final EntityDamageByEntityEvent e) {
         if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
             final User user = new User((Player) e.getEntity());

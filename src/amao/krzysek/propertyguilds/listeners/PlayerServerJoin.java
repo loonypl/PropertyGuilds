@@ -5,12 +5,13 @@ import net.agentlv.namemanager.NameManager;
 import net.agentlv.namemanager.api.NameManagerAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 
 public class PlayerServerJoin implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void playerServerJoin(final PlayerLoginEvent e) {
         User user = new User(e.getPlayer());
         // check if player has data in mysql `users`

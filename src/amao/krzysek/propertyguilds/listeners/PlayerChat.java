@@ -8,12 +8,13 @@ import amao.krzysek.propertyguilds.utils.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class PlayerChat implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void playerChat(final AsyncPlayerChatEvent e) {
         ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);
         if (config.getBoolean("chat.enable")) {
