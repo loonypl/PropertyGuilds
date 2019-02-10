@@ -4,6 +4,8 @@ import amao.krzysek.propertyguilds.commands.Commands;
 import amao.krzysek.propertyguilds.enums.ChatType;
 import amao.krzysek.propertyguilds.listeners.*;
 import amao.krzysek.propertyguilds.mysql.MySQL;
+import amao.krzysek.propertyguilds.utils.config.ConfigUtils2;
+import amao.krzysek.propertyguilds.utils.config.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -24,10 +26,14 @@ public class PropertyGuilds extends JavaPlugin {
     protected final FileConfiguration lang = new YamlConfiguration();
     protected static PropertyGuilds instance;
     protected MySQL mysql;
+    protected MessageUtils messageUtils;
+    protected ConfigUtils2 configUtils2;
     protected LinkedHashMap<String, ChatType> chatToggle = new LinkedHashMap<>();
     protected LinkedHashMap<String, LinkedList<String>> invites = new LinkedHashMap<>();
     protected LinkedHashMap<String, LinkedList<String>> alliances = new LinkedHashMap<>();
     protected LinkedHashMap<String, Location> baseCooldown = new LinkedHashMap<>();
+    protected LinkedHashMap<String, Object> configMessages = new LinkedHashMap<>();
+    protected LinkedHashMap<String, Object> configHash = new LinkedHashMap<>();
 
     public static PropertyGuilds getInstance() {
         return instance;
@@ -48,6 +54,13 @@ public class PropertyGuilds extends JavaPlugin {
         hookCommands();
         // listeners
         hookListeners();
+        // new
+        // messageutils
+        messageUtils = new MessageUtils();
+        messageUtils.loadMessages();
+        // configutils2
+        configUtils2 = new ConfigUtils2();
+        configUtils2.loadConfig();
     }
 
     @Override
@@ -94,6 +107,14 @@ public class PropertyGuilds extends JavaPlugin {
 
     public LinkedHashMap<String, Location> getBaseCooldown() {
         return this.baseCooldown;
+    }
+
+    public LinkedHashMap<String, Object> getConfigMessages() {
+        return this.configMessages;
+    }
+
+    public LinkedHashMap<String, Object> getConfigHash() {
+        return this.configHash;
     }
 
     // Configurations

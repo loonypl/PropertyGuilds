@@ -1,7 +1,7 @@
 name: PropertyGuilds
 main: amao.krzysek.propertyguilds.PropertyGuilds
 description: Guilds system for your server
-version: 0.1
+version: 0.1.1
 author: krzysek (deew)
 depend: [NameManager]
 commands:
@@ -9,3 +9,4 @@ commands:
     description: Main command of PropertyGuilds
     permission: propertyguilds.default
     permission-message: You don't have permission to this
+load: POSTWORLD

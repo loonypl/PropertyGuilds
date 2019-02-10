@@ -1,7 +1,7 @@
 package amao.krzysek.propertyguilds.listeners;
 
-import amao.krzysek.propertyguilds.enums.ConfigMessageType;
-import amao.krzysek.propertyguilds.utils.config.ConfigUtils;
+import amao.krzysek.propertyguilds.utils.config.ConfigUtils2;
+import amao.krzysek.propertyguilds.utils.config.MessageUtils;
 import amao.krzysek.propertyguilds.utils.guild.Guild;
 import amao.krzysek.propertyguilds.utils.user.User;
 import org.bukkit.entity.Player;
@@ -22,17 +22,25 @@ public class PlayerDamage implements Listener {
                     Guild userGuild = new Guild(user.getGuild());
                     Guild damagerGuild = new Guild(damager.getGuild());
                     if (userGuild.getTag().equals(damagerGuild.getTag())) {
-                        ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);
-                        ConfigUtils lang = new ConfigUtils(ConfigMessageType.LANG);
-                        if (!(config.getBoolean("guild.damage.friendly-fire.enable"))) {
-                            damager.message(lang.getString("guild.damage.friendly-fire.message"));
+                        //ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);
+                        //ConfigUtils lang = new ConfigUtils(ConfigMessageType.LANG);
+                        //if (!(config.getBoolean("guild.damage.friendly-fire.enable"))) {
+                        //    damager.message(lang.getString("guild.damage.friendly-fire.message"));
+                        ConfigUtils2 configUtils2 = new ConfigUtils2();
+                        MessageUtils messageUtils = new MessageUtils();
+                        if (!((boolean) configUtils2.getSetting("GUILD-DAMAGE-FRIENDLY-FIRE-ENABLE"))) {
+                            damager.message((String) messageUtils.getMessage("GUILD-DAMAGE-FRIENDLY-FIRE-MESSAGE"));
                             e.setCancelled(true);
                         }
                     } else if (userGuild.isAllied(damagerGuild.getTag())) {
-                        ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);
-                        ConfigUtils lang = new ConfigUtils(ConfigMessageType.LANG);
-                        if (!(config.getBoolean("guild.damage.alliances.enable"))) {
-                            damager.message(lang.getString("guild.damage.alliances.message"));
+                        //ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);
+                        //ConfigUtils lang = new ConfigUtils(ConfigMessageType.LANG);
+                        //if (!(config.getBoolean("guild.damage.alliances.enable"))) {
+                        //    damager.message(lang.getString("guild.damage.alliances.message"));
+                        ConfigUtils2 configUtils2 = new ConfigUtils2();
+                        MessageUtils messageUtils = new MessageUtils();
+                        if (!((boolean) configUtils2.getSetting("GUILD-DAMAGE-ALLIANCES-ENABLE"))) {
+                            damager.message((String) messageUtils.getMessage("GUILD-DAMAGE-ALLIANCES-MESSAGE"));
                             e.setCancelled(true);
                         }
                     }

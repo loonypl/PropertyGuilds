@@ -1,8 +1,7 @@
 package amao.krzysek.propertyguilds.listeners;
 
 import amao.krzysek.propertyguilds.enums.ChatType;
-import amao.krzysek.propertyguilds.enums.ConfigMessageType;
-import amao.krzysek.propertyguilds.utils.config.ConfigUtils;
+import amao.krzysek.propertyguilds.utils.config.ConfigUtils2;
 import amao.krzysek.propertyguilds.utils.guild.Guild;
 import amao.krzysek.propertyguilds.utils.user.User;
 import org.bukkit.Bukkit;
@@ -16,8 +15,10 @@ public class PlayerChat implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void playerChat(final AsyncPlayerChatEvent e) {
-        ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);
-        if (config.getBoolean("chat.enable")) {
+        //ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);
+        final ConfigUtils2 configUtils2 = new ConfigUtils2();
+        //if (config.getBoolean("chat.enable")) {
+        if ((boolean) configUtils2.getSetting("CHAT-ENABLE")) {
             User user = new User(e.getPlayer());
             final ChatType type = user.getChatType();
             String message;
@@ -29,7 +30,18 @@ public class PlayerChat implements Listener {
             if (type == ChatType.NULL || type == ChatType.GLOBAL) {
                 final String guildTag = user.getInfo("guild");
                 Guild guild = new Guild(guildTag);
-                Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', config.getString("chat.format"))
+                /*Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', config.getString("chat.format"))
+                        .replaceAll("%guild-tag%", guildTag)
+                        .replaceAll("%guild-name%", guild.getInfo("name"))
+                        .replaceAll("%guild-points%", guild.getInfo("points"))
+                        .replaceAll("%name%", user.getPlayer().getDisplayName())
+                        .replaceAll("%kills%", user.getInfo("kills"))
+                        .replaceAll("%deaths%", user.getInfo("deaths"))
+                        .replaceAll("%points%", user.getInfo("points"))
+                        .replaceAll("%world%", user.getPlayer().getWorld().getName())
+                        .replaceAll("%message%", message)
+                );*/
+                Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', (String) configUtils2.getSetting("CHAT-FORMAT"))
                         .replaceAll("%guild-tag%", guildTag)
                         .replaceAll("%guild-name%", guild.getInfo("name"))
                         .replaceAll("%guild-points%", guild.getInfo("points"))
@@ -46,7 +58,18 @@ public class PlayerChat implements Listener {
                 final String members = guild.getInfo("members_list");
                 for (final String nickname : members.split(";")) {
                     if (Bukkit.getServer().getPlayer(nickname) != null) {
-                        new User(Bukkit.getServer().getPlayer(nickname)).message(ChatColor.translateAlternateColorCodes('&', config.getString("guild-chat.format"))
+                        /*new User(Bukkit.getServer().getPlayer(nickname)).message(ChatColor.translateAlternateColorCodes('&', config.getString("guild-chat.format"))
+                                .replaceAll("%guild-tag%", guildTag)
+                                .replaceAll("%guild-name%", guild.getInfo("name"))
+                                .replaceAll("%guild-points%", guild.getInfo("points"))
+                                .replaceAll("%name%", user.getPlayer().getDisplayName())
+                                .replaceAll("%kills%", user.getInfo("kills"))
+                                .replaceAll("%deaths%", user.getInfo("deaths"))
+                                .replaceAll("%points%", user.getInfo("points"))
+                                .replaceAll("%world%", user.getPlayer().getWorld().getName())
+                                .replaceAll("%message%", message)
+                        );*/
+                        new User(Bukkit.getServer().getPlayer(nickname)).message(ChatColor.translateAlternateColorCodes('&', (String) configUtils2.getSetting("GUILD-CHAT-FORMAT"))
                                 .replaceAll("%guild-tag%", guildTag)
                                 .replaceAll("%guild-name%", guild.getInfo("name"))
                                 .replaceAll("%guild-points%", guild.getInfo("points"))
@@ -65,7 +88,18 @@ public class PlayerChat implements Listener {
                 final String members = guild.getInfo("members_list");
                 for (final String nickname : members.split(";")) {
                     if (Bukkit.getServer().getPlayer(nickname) != null) {
-                        new User(Bukkit.getServer().getPlayer(nickname)).message(ChatColor.translateAlternateColorCodes('&', config.getString("ally-chat.format"))
+                        /*new User(Bukkit.getServer().getPlayer(nickname)).message(ChatColor.translateAlternateColorCodes('&', config.getString("ally-chat.format"))
+                                .replaceAll("%guild-tag%", guildTag)
+                                .replaceAll("%guild-name%", guild.getInfo("name"))
+                                .replaceAll("%guild-points%", guild.getInfo("points"))
+                                .replaceAll("%name%", user.getPlayer().getDisplayName())
+                                .replaceAll("%kills%", user.getInfo("kills"))
+                                .replaceAll("%deaths%", user.getInfo("deaths"))
+                                .replaceAll("%points%", user.getInfo("points"))
+                                .replaceAll("%world%", user.getPlayer().getWorld().getName())
+                                .replaceAll("%message%", message)
+                        );*/
+                        new User(Bukkit.getServer().getPlayer(nickname)).message(ChatColor.translateAlternateColorCodes('&', (String) configUtils2.getSetting("ALLY-CHAT-FORMAT"))
                                 .replaceAll("%guild-tag%", guildTag)
                                 .replaceAll("%guild-name%", guild.getInfo("name"))
                                 .replaceAll("%guild-points%", guild.getInfo("points"))
@@ -82,7 +116,18 @@ public class PlayerChat implements Listener {
                 for (final String ally : alliances.split(";")) {
                     for (final String ally_member : new Guild(ally).getInfo("members_list").split(";")) {
                         if (Bukkit.getServer().getPlayer(ally_member) != null) {
-                            new User(Bukkit.getServer().getPlayer(ally_member)).message(ChatColor.translateAlternateColorCodes('&', config.getString("ally-chat.format"))
+                            /*new User(Bukkit.getServer().getPlayer(ally_member)).message(ChatColor.translateAlternateColorCodes('&', config.getString("ally-chat.format"))
+                                    .replaceAll("%guild-tag%", guildTag)
+                                    .replaceAll("%guild-name%", guild.getInfo("name"))
+                                    .replaceAll("%guild-points%", guild.getInfo("points"))
+                                    .replaceAll("%name%", user.getPlayer().getDisplayName())
+                                    .replaceAll("%kills%", user.getInfo("kills"))
+                                    .replaceAll("%deaths%", user.getInfo("deaths"))
+                                    .replaceAll("%points%", user.getInfo("points"))
+                                    .replaceAll("%world%", user.getPlayer().getWorld().getName())
+                                    .replaceAll("%message%", message)
+                            );*/
+                            new User(Bukkit.getServer().getPlayer(ally_member)).message(ChatColor.translateAlternateColorCodes('&', (String) configUtils2.getSetting("ALLY-CHAT-FORMAT"))
                                     .replaceAll("%guild-tag%", guildTag)
                                     .replaceAll("%guild-name%", guild.getInfo("name"))
                                     .replaceAll("%guild-points%", guild.getInfo("points"))

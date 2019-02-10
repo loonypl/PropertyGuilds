@@ -2,9 +2,9 @@ package amao.krzysek.propertyguilds.utils.user;
 
 import amao.krzysek.propertyguilds.PropertyGuilds;
 import amao.krzysek.propertyguilds.enums.ChatType;
-import amao.krzysek.propertyguilds.enums.ConfigMessageType;
 import amao.krzysek.propertyguilds.mysql.MySQL;
-import amao.krzysek.propertyguilds.utils.config.ConfigUtils;
+import amao.krzysek.propertyguilds.utils.config.ConfigUtils2;
+import amao.krzysek.propertyguilds.utils.config.MessageUtils;
 import amao.krzysek.propertyguilds.utils.guild.Guild;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -142,7 +142,8 @@ public class User {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 final String[] split = rs.getString("location").split(";");
-                final int guildRadius = rs.getInt("location_radius") + (new ConfigUtils(ConfigMessageType.CONFIG).getInt("guild.property.radius"));
+                //final int guildRadius = rs.getInt("location_radius") + (new ConfigUtils(ConfigMessageType.CONFIG).getInt("guild.property.radius"));
+                final int guildRadius = rs.getInt("location_radius") + ((int) new ConfigUtils2().getSetting("GUILD-PROPERTY-RADIUS"));
                 final Location guildLocation = new Location(Bukkit.getServer().getWorld(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]));
                 if (((guildLocation.getX() - guildRadius < player.getLocation().getX()) && (player.getLocation().getX() < guildLocation.getX() + guildRadius)) && ((guildLocation.getY() - guildRadius < player.getLocation().getY()) && (player.getLocation().getY() < guildLocation.getY() + guildRadius)) && ((guildLocation.getZ() - guildRadius < player.getLocation().getZ()) && (player.getLocation().getZ() < guildLocation.getZ() + guildRadius))) {
                     rs.close();
@@ -161,14 +162,16 @@ public class User {
 
     public boolean nearToSpawn() {
         final Location spawnLocation = player.getLocation().getWorld().getSpawnLocation();
-        final int spawnRadius = new ConfigUtils(ConfigMessageType.CONFIG).getInt("guild.property.spawn-radius");
+        //final int spawnRadius = new ConfigUtils(ConfigMessageType.CONFIG).getInt("guild.property.spawn-radius");
+        final int spawnRadius = (int) new ConfigUtils2().getSetting("GUILD-PROPERTY-SPAWN-RADIUS");
         if (((spawnLocation.getX() - spawnRadius < player.getLocation().getX()) && (player.getLocation().getX() < spawnLocation.getX() + spawnRadius)) && ((spawnLocation.getY() - spawnRadius < player.getLocation().getY()) && (player.getLocation().getY() < spawnLocation.getY() + spawnRadius)) && ((spawnLocation.getZ() - spawnRadius < player.getLocation().getZ()) && (player.getLocation().getZ() < spawnLocation.getZ() + spawnRadius))) {
             return false;
         } else return true;
     }
 
     public boolean hasItemsForGuild() {
-        final ArrayList<String> items = new ConfigUtils(ConfigMessageType.CONFIG).getArrayList("create-require-items.list");
+        //final ArrayList<String> items = new ConfigUtils(ConfigMessageType.CONFIG).getArrayList("create-require-items.list");
+        final ArrayList<String> items = (ArrayList<String>) new ConfigUtils2().getSetting("CREATE-REQUIRE-ITEMS-LIST");
         Inventory inv = player.getInventory();
         for (final String split : items) {
             final int amount = Integer.parseInt(split.split("@")[0]);
@@ -179,7 +182,7 @@ public class User {
     }
 
     public void removeItemsForGuild() {
-        final ArrayList<String> items = new ConfigUtils(ConfigMessageType.CONFIG).getArrayList("create-require-items.list");
+        final ArrayList<String> items = (ArrayList<String>) new ConfigUtils2().getSetting("CREATE-REQUIRE-ITEMS-LIST");
         Inventory inv = player.getInventory();
         for (final String split : items) {
             final int amount = Integer.parseInt(split.split("@")[0]);
@@ -189,12 +192,18 @@ public class User {
     }
 
     public void sendCreateSuccessMessage(final String tag, final String name, final String leader) {
-        ConfigUtils lang = new ConfigUtils(ConfigMessageType.LANG);
-        ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);
-        final boolean broadcastEnable = config.getBoolean("guild.create.broadcast.enable");
-        final boolean privateEnable = config.getBoolean("guild.create.private.enable");
-        final String broadcastMessage = lang.getString("guild.create.broadcast.message");
-        final String privateMessage = lang.getString("guild.create.private.message");
+        //ConfigUtils lang = new ConfigUtils(ConfigMessageType.LANG);
+        //ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);
+        ConfigUtils2 configUtils2 = new ConfigUtils2();
+        MessageUtils messageUtils = new MessageUtils();
+        //final boolean broadcastEnable = config.getBoolean("guild.create.broadcast.enable");
+        final boolean broadcastEnable = (boolean) configUtils2.getSetting("GUILD-CREATE-BROADCAST-ENABLE");
+        //final boolean privateEnable = config.getBoolean("guild.create.private.enable");
+        final boolean privateEnable = (boolean) configUtils2.getSetting("GUILD-CREATE-PRIVATE-ENABLE");
+        //final String broadcastMessage = lang.getString("guild.create.broadcast.message");
+        final String broadcastMessage = (String) messageUtils.getMessage("GUILD-CREATE-BROADCAST-MESSAGE");
+        //final String privateMessage = lang.getString("guild.create.private.message");
+        final String privateMessage = (String) messageUtils.getMessage("GUILD-CREATE-PRIVATE-MESSAGE");
         if (broadcastEnable) Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', broadcastMessage).replaceAll("%tag%", tag).replaceAll("%name%", name).replaceAll("%leader%", leader));
         if (privateEnable) message(privateMessage.replaceAll("%tag%", tag).replaceAll("%name%", name).replaceAll("%leader%", leader));
     }
@@ -223,12 +232,18 @@ public class User {
     }
 
     public void sendDeleteSuccessMessage(final String tag, final String name, final String leader) {
-        ConfigUtils lang = new ConfigUtils(ConfigMessageType.LANG);
-        ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);
-        final boolean broadcastEnable = config.getBoolean("guild.delete.broadcast.enable");
-        final boolean privateEnable = config.getBoolean("guild.delete.private.enable");
-        final String broadcastMessage = lang.getString("guild.delete.broadcast.message");
-        final String privateMessage = lang.getString("guild.delete.private.message");
+        //ConfigUtils lang = new ConfigUtils(ConfigMessageType.LANG);
+        //ConfigUtils config = new ConfigUtils(ConfigMessageType.CONFIG);
+        ConfigUtils2 configUtils2 = new ConfigUtils2();
+        MessageUtils messageUtils = new MessageUtils();
+        //final boolean broadcastEnable = config.getBoolean("guild.delete.broadcast.enable");
+        final boolean broadcastEnable = (boolean) configUtils2.getSetting("GUILD-DELETE-BROADCAST-ENABLE");
+        //final boolean privateEnable = config.getBoolean("guild.delete.private.enable");
+        final boolean privateEnable = (boolean) configUtils2.getSetting("GUILD-DELETE-PRIVATE-ENABLE");
+        //final String broadcastMessage = lang.getString("guild.delete.broadcast.message");
+        final String broadcastMessage = (String) messageUtils.getMessage("GUILD-DELETE-BROADCAST-MESSAGE");
+        //final String privateMessage = lang.getString("guild.delete.private.message");
+        final String privateMessage = (String) messageUtils.getMessage("GUILD-DELETE-PRIVATE-MESSAGE");
         if (broadcastEnable) Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', broadcastMessage).replaceAll("%tag%", tag).replaceAll("%name%", name).replaceAll("%leader%", leader));
         if (privateEnable) message(privateMessage.replaceAll("%tag%", tag).replaceAll("%name%", name).replaceAll("%leader%", leader));
     }

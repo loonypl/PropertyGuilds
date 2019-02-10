@@ -2,14 +2,11 @@ package amao.krzysek.propertyguilds.utils.mysql;
 
 import amao.krzysek.propertyguilds.PropertyGuilds;
 import amao.krzysek.propertyguilds.mysql.MySQL;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 
 public class MySQLUtils {
 

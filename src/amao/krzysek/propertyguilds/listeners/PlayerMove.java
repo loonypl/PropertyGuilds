@@ -1,7 +1,6 @@
 package amao.krzysek.propertyguilds.listeners;
 
-import amao.krzysek.propertyguilds.enums.ConfigMessageType;
-import amao.krzysek.propertyguilds.utils.config.ConfigUtils;
+import amao.krzysek.propertyguilds.utils.config.MessageUtils;
 import amao.krzysek.propertyguilds.utils.location.LocationUtils;
 import amao.krzysek.propertyguilds.utils.user.User;
 import org.bukkit.event.EventHandler;
@@ -19,19 +18,22 @@ public class PlayerMove implements Listener {
         if (from.atGuildProperty()) {
             if (!(to.atGuildProperty())) {
                 // greetings
-                user.message(new ConfigUtils(ConfigMessageType.LANG).getString("guild.property.entered").replaceAll("%tag%", to.getGuild()));
+                //user.message(new ConfigUtils(ConfigMessageType.LANG).getString("guild.property.entered").replaceAll("%tag%", to.getGuild()));
+                user.message(((String) new MessageUtils().getMessage("GUILD-PROPERTY-ENTERED")).replaceAll("%tag%", to.getGuild()));
             }
         } else if (!(from.atGuildProperty())) {
             if (to.atGuildProperty()) {
                 // farewell
-                user.message(new ConfigUtils(ConfigMessageType.LANG).getString("guild.property.left").replaceAll("%tag%", from.getGuild()));
+                //user.message(new ConfigUtils(ConfigMessageType.LANG).getString("guild.property.left").replaceAll("%tag%", from.getGuild()));
+                user.message(((String) new MessageUtils().getMessage("GUILD-PROPERTY-LEFT")).replaceAll("%tag%", from.getGuild()));
             }
         }
         // awaiting base teleport
         if (user.waitingForBaseTeleport()) {
             if (user.changedLocationBaseTeleport(e.getTo())) {
                 user.removeBaseTeleportListener();
-                user.message(new ConfigUtils(ConfigMessageType.LANG).getString("guild.teleport.base.abort"));
+                //user.message(new ConfigUtils(ConfigMessageType.LANG).getString("guild.teleport.base.abort"));
+                user.message((String) new MessageUtils().getMessage("GUILD-TELEPORT-BASE-ABORT"));
             }
         }
     }

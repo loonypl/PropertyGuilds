@@ -1,9 +1,9 @@
 package amao.krzysek.propertyguilds.listeners;
 
 import amao.krzysek.propertyguilds.PropertyGuilds;
-import amao.krzysek.propertyguilds.enums.ConfigMessageType;
 import amao.krzysek.propertyguilds.mysql.MySQL;
-import amao.krzysek.propertyguilds.utils.config.ConfigUtils;
+import amao.krzysek.propertyguilds.utils.config.ConfigUtils2;
+import amao.krzysek.propertyguilds.utils.config.MessageUtils;
 import amao.krzysek.propertyguilds.utils.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,7 +22,8 @@ public class PlayerInteract implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void interactEvent(final PlayerInteractEvent e) {
-        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (e.getClickedBlock().getType().equals(Material.CHEST) || e.getClickedBlock().getType().equals(Material.TRAPPED_CHEST) && new ConfigUtils(ConfigMessageType.CONFIG).getBoolean("guild.blocks.chests.allow-open"))) {
+        //if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (e.getClickedBlock().getType().equals(Material.CHEST) || e.getClickedBlock().getType().equals(Material.TRAPPED_CHEST) && new ConfigUtils(ConfigMessageType.CONFIG).getBoolean("guild.blocks.chests.allow-open"))) {
+        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (e.getClickedBlock().getType().equals(Material.CHEST) || e.getClickedBlock().getType().equals(Material.TRAPPED_CHEST) && ((boolean) new ConfigUtils2().getSetting("GUILD-BLOCKS-CHESTS-ALLOW-OPEN")))) {
             MySQL mysql = PropertyGuilds.getInstance().getMySQL();
             try {
                 PreparedStatement ps = mysql.getConnection().prepareStatement(
@@ -42,8 +43,10 @@ public class PlayerInteract implements Listener {
                             rs.close();
                             ps.close();
                             e.setCancelled(true);
-                            final ConfigUtils configUtils = new ConfigUtils(ConfigMessageType.LANG);
-                            user.message(configUtils.getString("guild.blocks.chests.cannot-open"));
+                            //final ConfigUtils configUtils = new ConfigUtils(ConfigMessageType.LANG);
+                            //user.message(configUtils.getString("guild.blocks.chests.cannot-open"));
+                            final MessageUtils messageUtils = new MessageUtils();
+                            user.message((String) messageUtils.getMessage("GUILD-BLOCKS-CHESTS-CANNOT-OPEN"));
                             break;
                         }
                     }
