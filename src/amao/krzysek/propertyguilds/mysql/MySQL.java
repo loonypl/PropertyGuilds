@@ -48,7 +48,7 @@ public class MySQL {
         try {
             try {
                 statement = connection.createStatement();
-                String sql = "CREATE TABLE Guilds (" +
+                String sql = "CREATE TABLE guilds (" +
                         " tag VARCHAR(255) NOT NULL PRIMARY KEY," +
                         " name VARCHAR(255) NOT NULL," +
                         " leader VARCHAR(255) NOT NULL," +
@@ -64,7 +64,7 @@ public class MySQL {
                 statement.close();
             } finally {
                 statement = connection.createStatement();
-                String sql = "CREATE TABLE Users (" +
+                String sql = "CREATE TABLE users (" +
                         " name VARCHAR(255) NOT NULL PRIMARY KEY," +
                         " points INTEGER NOT NULL," +
                         " kills INTEGER NOT NULL," +
