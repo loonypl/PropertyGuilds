@@ -57,7 +57,7 @@ public class MySQL {
                         " alliances INTEGER NOT NULL," +
                         " alliances_list VARCHAR(255)," +
                         " location VARCHAR(255) NOT NULL," +
-                        " location_radius INTEGER NOT NULL" +
+                        " location_radius INTEGER NOT NULL," +
                         " points INTEGER NOT NULL" +
                         " )";
                 statement.executeUpdate(sql);
